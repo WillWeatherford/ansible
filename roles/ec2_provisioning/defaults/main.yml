@@ -4,7 +4,7 @@ instance_type: t2.micro
 ami: ami-9abea4fb
 vpc_subnet_id: subnet-58d1763c
 region: us-west-2
-instance_tags: {"Name": 'delivercute'}
+instance_tags: {"Name": "delivercute"}
 root_ebs_size: 8
 zone: us-west-2b
 instance_profile_name: delivercute
