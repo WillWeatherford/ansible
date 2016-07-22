@@ -1,11 +1,11 @@
-keypair: testing
-security_group: launch-wizard-2
+keypair: will-pair
+security_group: ssh-access
 instance_type: t2.micro
 ami: ami-9abea4fb
-vpc_subnet_id: subnet-77bdf92e
+vpc_subnet_id: subnet-58d1763c
 region: us-west-2
-instance_tags: {"Name": "ansible-built"}
+instance_tags: {"Name": 'delivercute'}
 root_ebs_size: 8
-zone: us-west-2c
-instance_profile_name: Hannah
+zone: us-west-2b
+instance_profile_name: delivercute
 num_instances: 1
