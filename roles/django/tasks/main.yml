@@ -58,7 +58,7 @@
     settings: "{{ settings_file }}"
     command: makemigrations
 
-- name: Run Migrations
+- name: Migrate
   environment:
     SECRET_KEY: "{{ secret_key }}"
   #   DATABASE_URL: "{{ db_url }}"
@@ -66,6 +66,24 @@
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: migrate
+
+- name: Make App Migrations
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
+  #   DATABASE_URL: "{{ db_url }}"
+  django_manage:
+    app_path: "{{ django_home }}"
+    settings: "{{ settings_file }}"
+    command: makemigrations subscribers
+
+- name: Migrate App
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
+  #   DATABASE_URL: "{{ db_url }}"
+  django_manage:
+    app_path: "{{ django_home }}"
+    settings: "{{ settings_file }}"
+    command: migrate subscribers
 
 - name: Collect Static Files
   environment:
