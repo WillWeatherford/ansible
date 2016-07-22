@@ -1,5 +1,8 @@
 ---
 
+- name: Get Secret Variables
+  include_vars: secrets.yml
+
 - name: Install System Packages
   apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
   sudo: yes
@@ -47,25 +50,28 @@
 #     db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
 
 - name: Make Migrations
-  # environment:
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
   #   DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
-    settings: "{{ settings_file_dot }}"
+    settings: "{{ settings_file }}"
     command: makemigrations
 
 - name: Run Migrations
-  # environment:
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
   #   DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
-    settings: "{{ settings_file_dot }}"
+    settings: "{{ settings_file }}"
     command: migrate
 
 - name: Collect Static Files
-  # environment:
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
   #   DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
-    settings: "{{ settings_file_dot }}"
+    settings: "{{ settings_file }}"
     command: collectstatic

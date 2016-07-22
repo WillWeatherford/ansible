@@ -2,6 +2,5 @@ django_project_name: delivercute
 django_home: "/home/ubuntu/{{ django_project_name }}"
 remote_repo: https://github.com/WillWeatherford/deliver-cute.git
 rds_db_instance: imagerdb
-settings_file_dot: "{{ django_project_name }}.production_settings"
-settings_file_slash: "{{ django_project_name }}/production_settings.py"
+settings_file: "{{ django_project_name }}.production_settings"
 wsgi_file: "{{ django_project_name }}.wsgi"
