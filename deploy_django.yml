@@ -4,7 +4,14 @@
   hosts: tag_Name_delivercute
   remote_user: ubuntu
   gather_facts: yes
-
+  vars_files:
+    - secrets.yml
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
+    DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+    DELIVERCUTE_EMAIL: "{{ project_email }}"
+    DELIVERCUTE_PASSWORD_BASIC: "{{ project_password_basic }}"
+  
   roles:
     - role: django
     - role: gunicorn

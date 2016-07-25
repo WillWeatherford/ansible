@@ -1,5 +1,5 @@
 django_project_name: delivercute
-rds_db_name: "{{ django_project_name }}"
+rds_db_name: delivercute-db
 django_home: "/home/ubuntu/{{ django_project_name }}"
 remote_repo: https://github.com/WillWeatherford/deliver-cute.git
 settings_file: "{{ django_project_name }}.production_settings"

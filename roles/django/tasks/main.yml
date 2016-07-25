@@ -1,7 +1,7 @@
 ---
 
-- name: Get Secret Variables
-  include_vars: secrets.yml
+# - name: Get Secret Variables
+#   include_vars: secrets.yml
 
 - name: Install System Packages
   apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
@@ -48,7 +48,6 @@
 
 - name: Make Migrations
   environment:
-    SECRET_KEY: "{{ secret_key }}"
     DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
@@ -57,7 +56,6 @@
 
 - name: Migrate
   environment:
-    SECRET_KEY: "{{ secret_key }}"
     DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
@@ -66,7 +64,6 @@
 
 - name: Make App Migrations
   environment:
-    SECRET_KEY: "{{ secret_key }}"
     DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
@@ -75,7 +72,6 @@
 
 - name: Migrate App
   environment:
-    SECRET_KEY: "{{ secret_key }}"
     DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
@@ -84,7 +80,6 @@
 
 - name: Collect Static Files
   environment:
-    SECRET_KEY: "{{ secret_key }}"
     DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
@@ -94,7 +89,5 @@
 - name: Execute On-Deploy Script
   sudo: yes
   environment:
-    SECRET_KEY: "{{ secret_key }}"
-    DELIVERCUTE_EMAIL: "{{project_email}}"
-    DELIVERCUTE_PASSWORD_BASIC: "{{ project_password }}"
+    DATABASE_URL: "{{ db_url }}"
   command: "python {{ django_home }}/on_deploy.py"
