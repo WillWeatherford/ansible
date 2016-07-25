@@ -38,21 +38,18 @@
 #  sudo: yes
 #  file: path={{ media_path }} owner=www-data recurse=yes state=directory
 
-# - name: Get DB Hostvars
-#   set_fact:
-#     db_host: "{{ hostvars[groups[rds_db_instance][0]] }}"
+- name: Get DB Hostvars
+  set_fact:
+    db_host: "{{ hostvars[groups[rds_db_name][0]] }}"
 
-# - name: Get DB Password
-#   include_vars: secrets.yml
-
-# - name: Set DB URL
-#   set_fact:
-#     db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
+- name: Set DB URL
+  set_fact:
+    db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
 
 - name: Make Migrations
   environment:
     SECRET_KEY: "{{ secret_key }}"
-  #   DATABASE_URL: "{{ db_url }}"
+    DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
@@ -61,7 +58,7 @@
 - name: Migrate
   environment:
     SECRET_KEY: "{{ secret_key }}"
-  #   DATABASE_URL: "{{ db_url }}"
+    DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
@@ -70,7 +67,7 @@
 - name: Make App Migrations
   environment:
     SECRET_KEY: "{{ secret_key }}"
-  #   DATABASE_URL: "{{ db_url }}"
+    DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
@@ -79,7 +76,7 @@
 - name: Migrate App
   environment:
     SECRET_KEY: "{{ secret_key }}"
-  #   DATABASE_URL: "{{ db_url }}"
+    DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
@@ -88,8 +85,16 @@
 - name: Collect Static Files
   environment:
     SECRET_KEY: "{{ secret_key }}"
-  #   DATABASE_URL: "{{ db_url }}"
+    DATABASE_URL: "{{ db_url }}"
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: collectstatic
+
+- name: Execute On-Deploy Script
+  sudo: yes
+  environment:
+    SECRET_KEY: "{{ secret_key }}"
+    DELIVERCUTE_EMAIL: "{{project_email}}"
+    DELIVERCUTE_PASSWORD_BASIC: "{{ project_password }}"
+  command: "python {{ django_home }}/on_deploy.py"
