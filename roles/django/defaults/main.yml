@@ -1,6 +1,6 @@
 django_home: "/home/ubuntu/{{ django_project_name }}"
 settings_file: "{{ django_project_name }}.production_settings"
 wsgi_file: "{{ django_project_name }}.wsgi"
-app_user: www-data
+app_user: "www-data"
 media_path: "{{django_home}}/media"
 static_path: "{{django_home}}/static"
