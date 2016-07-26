@@ -1,8 +1,5 @@
 ---
 
-# - name: Get Secret Variables
-#   include_vars: secrets.yml
-
 - name: Install System Packages
   apt: name={{ item }} state=present update_cache=yes cache_valid_time=3600
   sudo: yes
@@ -23,7 +20,7 @@
     - libwebp-dev
     - tcl8.6-dev
     - tk8.6-dev
-    - python-tk
+    # - python-tk
 
 - name: Clone Django Repository
   git: repo={{ remote_repo }} dest={{ django_home }} force=yes
@@ -34,9 +31,9 @@
     state: present
     requirements: "{{ django_home }}/requirements.txt"
 
-#- name: Change Media Ownership
-#  sudo: yes
-#  file: path={{ media_path }} owner=www-data recurse=yes state=directory
+- name: Change Media Ownership
+  sudo: yes
+  file: path={{ media_path }} owner={{ app_user }} recurse=yes state=directory
 
 - name: Get DB Hostvars
   set_fact:

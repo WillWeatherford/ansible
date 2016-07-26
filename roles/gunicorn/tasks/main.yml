@@ -1,8 +1,5 @@
 ---
 
-# - name: Get Secret Variables
-#   include_vars: secrets.yml
-
 - name: Install Requirements
   sudo: yes
   pip: name=gunicorn state=present

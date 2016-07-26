@@ -1,11 +1,11 @@
 ---
 
 - name: Deploy Django Application to Web Servers
-  hosts: tag_Name_delivercute
+  vars_files:
+    - delivercute_vars.yml
+  hosts: tag_Name_{{ django_project_name }}
   remote_user: ubuntu
   gather_facts: yes
-  vars_files:
-    - secrets.yml
   environment:
     SECRET_KEY: "{{ secret_key }}"
     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
@@ -28,14 +28,14 @@
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             }
-          # - location /static { alias {{ django_home }}/imagersite/static; }
-          # - location /media { alias {{ django_home }}/imagersite/media; }
+          - location /static { alias {{ django_home }}/static; }
+          - location /media { alias {{ django_home }}/media; }
   tasks:
     - name: Creates weekly backup cronjob
       cron: minute="0"
         name="Deliver Cute"
         user="ubuntu"
-        job="{{ django_home }}/on_schedule.py"
+        job="python {{ django_home }}/on_schedule.py"
     - name: Insert secret key into cron env
       cronvar: user="ubuntu" name=SECRET_KEY value="{{ secret_key }}"
     - name: Insert Django settings module into cron env
@@ -44,3 +44,5 @@
       cronvar: user="ubuntu" name=DELIVERCUTE_EMAIL value="{{ project_email }}"
     - name: Insert app email password into cron env
       cronvar: user="ubuntu" name=DELIVERCUTE_PASSWORD value="{{ project_password }}"
+    - name: Insert Postgres database URL inro cron env
+      cronvar: user="ubuntu" name=DATABASE_URL value="{{ db_url }}"
