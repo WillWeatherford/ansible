@@ -10,8 +10,9 @@
     DATABASE_URL: "{{ db_url }}"
     SECRET_KEY: "{{ secret_key }}"
     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-    DELIVERCUTE_EMAIL: "{{ project_email }}"
-    DELIVERCUTE_PASSWORD_BASIC: "{{ project_password_basic }}"
+    PROJECT_EMAIL: "{{ project_email }}"
+    PROJECT_PASSWORD: "{{ project_password }}"
+    PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
   roles:
     - role: django
