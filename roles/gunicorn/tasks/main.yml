@@ -6,8 +6,8 @@
 
 - name: Create gunicorn Upstart Job
   sudo: yes
-  template: "src=django.conf.j2 dest=/etc/init/{{ django_project_name }}.conf"
+  template: "src=django.conf.j2 dest=/etc/init/{{ project_name }}.conf"
 
 - name: Start gunicorn Upstart Job
   sudo: yes
-  service: name={{ django_project_name }} state=restarted
+  service: name={{ project_name }} state=restarted
