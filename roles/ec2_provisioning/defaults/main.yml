@@ -1,8 +1,5 @@
-keypair: will-pair
-security_group: ssh-access
 instance_type: t2.micro
 ami: ami-9abea4fb
-vpc_subnet_id: "{{ vpc_subnet_id }}"
 region: us-west-2
 instance_tags: {"Name": "{{ project_name }}"}
 root_ebs_size: 8

@@ -8,7 +8,7 @@ setgid {{ app_user }}
 chdir {{ django_home }}
 env DJANGO_SETTINGS_MODULE={{ settings_file }}
 env DATABASE_URL={{ db_url }}
-env EMAIL_HOST_USER={{ project_email }}
-env EMAIL_HOST_PASSWORD={{ project_password }}
+env PROJECT_EMAIL={{ project_email }}
+env PROJECT_APP_PASSWORD={{ project_app_password }}
 env SECRET_KEY={{ secret_key }}
 exec gunicorn -b 127.0.0.1:8000 -w 4 {{ wsgi_file }} --error-logfile /tmp/gunicorn-error.log
