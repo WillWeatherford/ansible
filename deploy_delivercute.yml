@@ -55,3 +55,6 @@
       cronvar: user="ubuntu" name=DATABASE_URL value="{{ db_url }}"
 
 - include: deploy_django.yml project_var_file=delivercute_vars.yml
+
+#pre_tasks
+#post_tasks
