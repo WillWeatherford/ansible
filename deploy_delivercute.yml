@@ -16,27 +16,27 @@
       set_fact:
         db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
 
-    - name: Execute On-Deploy Script
-      sudo: yes
-      command: "python {{ django_home }}/on_deploy.py"
-      environment:
-        DATABASE_URL: "{{ db_url }}"
-        SECRET_KEY: "{{ secret_key }}"
-        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-        PROJECT_EMAIL: "{{ project_email }}"
-        PROJECT_PASSWORD: "{{ project_password }}"
-        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
+    # - name: Execute On-Deploy Script
+    #   sudo: yes
+    #   command: "python {{ django_home }}/on_deploy.py"
+    #   environment:
+    #     DATABASE_URL: "{{ db_url }}"
+    #     SECRET_KEY: "{{ secret_key }}"
+    #     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+    #     PROJECT_EMAIL: "{{ project_email }}"
+    #     PROJECT_PASSWORD: "{{ project_password }}"
+    #     PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
-    - name: Execute Test Run of On-Schedule Script
-      sudo: yes
-      command: "python {{ django_home }}/on_schedule.py DEBUG"
-      environment:
-        DATABASE_URL: "{{ db_url }}"
-        SECRET_KEY: "{{ secret_key }}"
-        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-        PROJECT_EMAIL: "{{ project_email }}"
-        PROJECT_PASSWORD: "{{ project_password }}"
-        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
+    # - name: Execute Test Run of On-Schedule Script
+    #   sudo: yes
+    #   command: "python {{ django_home }}/on_schedule.py DEBUG"
+    #   environment:
+    #     DATABASE_URL: "{{ db_url }}"
+    #     SECRET_KEY: "{{ secret_key }}"
+    #     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+    #     PROJECT_EMAIL: "{{ project_email }}"
+    #     PROJECT_PASSWORD: "{{ project_password }}"
+    #     PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
     - name: Creates hourly cronjob to send emails to subscribers
       cron: minute="0"
