@@ -1,0 +1,7 @@
+- name: Get DB Hostvars
+  set_fact:
+    db_host: "{{ hostvars[groups[rds_db_name][0]] }}"
+
+- name: Set DB URL
+  set_fact:
+    db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
