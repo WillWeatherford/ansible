@@ -35,33 +35,17 @@
   sudo: yes
   file: path={{ media_path }} owner={{ app_user }} recurse=yes state=directory
 
-# - name: Make Migrations
-#   django_manage:
-#     app_path: "{{ django_home }}"
-#     settings: "{{ settings_file }}"
-#     command: makemigrations
-
-# - name: Migrate
-#   django_manage:
-#     app_path: "{{ django_home }}"
-#     settings: "{{ settings_file }}"
-#     command: migrate
-
 - name: Make App Migrations
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: makemigrations subscribers
-  # environment:
-  #     DATABASE_URL: "{{ db_url }}"
 
 - name: Migrate
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: migrate
-  # environment:
-  #     DATABASE_URL: "{{ db_url }}"
 
 - name: Collect Static Files
   django_manage:
