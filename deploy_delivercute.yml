@@ -49,8 +49,10 @@
       cronvar: user="ubuntu" name=DJANGO_SETTINGS_MODULE value="{{ settings_file }}"
     - name: Insert app email address into cron env
       cronvar: user="ubuntu" name=PROJECT_EMAIL value="{{ project_email }}"
+    - name: Insert email password into cron env
+      cronvar: user="ubuntu" name=PROJECT_PASSWORD value="{{ project_password }}"
     - name: Insert app email password into cron env
-      cronvar: user="ubuntu" name=PROJECT_APP_PASSWORD value="{{ project_password }}"
+      cronvar: user="ubuntu" name=PROJECT_APP_PASSWORD value="{{ project_app_password }}"
     - name: Insert Postgres database URL inro cron env
       cronvar: user="ubuntu" name=DATABASE_URL value="{{ db_url }}"
 

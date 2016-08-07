@@ -20,9 +20,9 @@
     - libwebp-dev
     - tcl8.6-dev
     - tk8.6-dev
-    # - python-tk
 
 - name: Clone Django Repository
+  sudo: yes
   git: repo={{ remote_repo }} dest={{ django_home }} force=yes
 
 - name: Install Python Dependencies
