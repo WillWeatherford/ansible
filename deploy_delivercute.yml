@@ -1,11 +1,9 @@
 ---
 
-- name: Deploy {{ project_name }} Django project
+- name: Deploy {{ project_name }} Django Project
   hosts: tag_Name_{{ project_name }}
   remote_user: ubuntu
   gather_facts: yes
-  vars_files:
-    - delivercute_vars.yml
   environment:
       SECRET_KEY: "{{ secret_key }}"
       DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
@@ -37,6 +35,3 @@
     - role: "{{ project_name }}_on_deploy"
       environment:
         DATABASE_URL: "{{ db_url }}"
-
-#pre_tasks
-#post_tasks
