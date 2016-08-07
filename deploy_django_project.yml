@@ -1,21 +1,21 @@
 ---
 
-- name: Deploy Django Application to Web Servers
+- name: Deploy {{ project_name }} Django Project
   hosts: tag_Name_{{ project_name }}
   remote_user: ubuntu
   gather_facts: yes
-  vars_files:
-    - "{{ project_var_file }}"
   environment:
-    DATABASE_URL: "{{ db_url }}"
-    SECRET_KEY: "{{ secret_key }}"
-    DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-    PROJECT_EMAIL: "{{ project_email }}"
-    PROJECT_PASSWORD: "{{ project_password }}"
-    PROJECT_APP_PASSWORD: "{{ project_app_password }}"
+      SECRET_KEY: "{{ secret_key }}"
+      DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+      PROJECT_EMAIL: "{{ project_email }}"
+      PROJECT_PASSWORD: "{{ project_password }}"
+      PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
   roles:
+    - role: get_aws_db_url
     - role: django
+      environment:
+        DATABASE_URL: "{{ db_url }}"
     - role: gunicorn
     - role: jdauphant.nginx
       sudo: yes
@@ -32,3 +32,6 @@
             }
           - location /static { alias {{ django_home }}/static; }
           - location /media { alias {{ django_home }}/media; }
+    - role: "{{ project_name }}_on_deploy"
+      environment:
+        DATABASE_URL: "{{ db_url }}"
