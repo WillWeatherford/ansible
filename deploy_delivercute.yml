@@ -1,42 +1,60 @@
 ---
 
-- name: Deploy delivercute app
+- name: Deploy delivercute Django project
   hosts: tag_Name_delivercute
   remote_user: ubuntu
   gather_facts: yes
   vars_files:
     - delivercute_vars.yml
+  environment:
+      SECRET_KEY: "{{ secret_key }}"
+      DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+      PROJECT_EMAIL: "{{ project_email }}"
+      PROJECT_PASSWORD: "{{ project_password }}"
+      PROJECT_APP_PASSWORD: "{{ project_app_password }}"
+
+  roles:
+    - role: get_aws_db_url
+    - role: django
+    - role: gunicorn
+    - role: jdauphant.nginx
+      sudo: yes
+      nginx_sites:
+        default:
+          - listen 80
+          - server_name "{{ ec2_public_dns_name }}"
+          - access_log "/var/log/nginx/django.log"
+          - location / {
+              proxy_pass http://127.0.0.1:8000;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            }
+          - location /static { alias {{ django_home }}/static; }
+          - location /media { alias {{ django_home }}/media; }
 
   tasks:
-    - name: Get DB Hostvars
-      set_fact:
-        db_host: "{{ hostvars[groups[rds_db_name][0]] }}"
+    - name: Execute On-Deploy Script
+      sudo: yes
+      command: "python {{ django_home }}/on_deploy.py"
+      environment:
+        DATABASE_URL: "{{ db_url }}"
+        SECRET_KEY: "{{ secret_key }}"
+        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+        PROJECT_EMAIL: "{{ project_email }}"
+        PROJECT_PASSWORD: "{{ project_password }}"
+        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
-    - name: Set DB URL
-      set_fact:
-        db_url: "{{ db_host.ec2_engine }}://{{ db_host.ec2_master_username }}:{{ db_password }}@{{ db_host.ec2__address }}:{{ db_host.ec2__port }}/{{ db_host.ec2_DBName }}"
-
-    # - name: Execute On-Deploy Script
-    #   sudo: yes
-    #   command: "python {{ django_home }}/on_deploy.py"
-    #   environment:
-    #     DATABASE_URL: "{{ db_url }}"
-    #     SECRET_KEY: "{{ secret_key }}"
-    #     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-    #     PROJECT_EMAIL: "{{ project_email }}"
-    #     PROJECT_PASSWORD: "{{ project_password }}"
-    #     PROJECT_APP_PASSWORD: "{{ project_app_password }}"
-
-    # - name: Execute Test Run of On-Schedule Script
-    #   sudo: yes
-    #   command: "python {{ django_home }}/on_schedule.py DEBUG"
-    #   environment:
-    #     DATABASE_URL: "{{ db_url }}"
-    #     SECRET_KEY: "{{ secret_key }}"
-    #     DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-    #     PROJECT_EMAIL: "{{ project_email }}"
-    #     PROJECT_PASSWORD: "{{ project_password }}"
-    #     PROJECT_APP_PASSWORD: "{{ project_app_password }}"
+    - name: Execute Test Run of On-Schedule Script
+      sudo: yes
+      command: "python {{ django_home }}/on_schedule.py DEBUG"
+      environment:
+        DATABASE_URL: "{{ db_url }}"
+        SECRET_KEY: "{{ secret_key }}"
+        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
+        PROJECT_EMAIL: "{{ project_email }}"
+        PROJECT_PASSWORD: "{{ project_password }}"
+        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
 
     - name: Creates hourly cronjob to send emails to subscribers
       cron: minute="0"
@@ -55,8 +73,6 @@
       cronvar: user="ubuntu" name=PROJECT_APP_PASSWORD value="{{ project_app_password }}"
     - name: Insert Postgres database URL inro cron env
       cronvar: user="ubuntu" name=DATABASE_URL value="{{ db_url }}"
-
-- include: deploy_django.yml project_var_file=delivercute_vars.yml
 
 #pre_tasks
 #post_tasks
