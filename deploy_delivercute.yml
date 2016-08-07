@@ -1,7 +1,7 @@
 ---
 
-- name: Deploy delivercute Django project
-  hosts: tag_Name_delivercute
+- name: Deploy {{ project_name }} Django project
+  hosts: tag_Name_{{ project_name }}
   remote_user: ubuntu
   gather_facts: yes
   vars_files:
@@ -16,6 +16,8 @@
   roles:
     - role: get_aws_db_url
     - role: django
+      environment:
+        DATABASE_URL: "{{ db_url }}"
     - role: gunicorn
     - role: jdauphant.nginx
       sudo: yes
@@ -32,47 +34,9 @@
             }
           - location /static { alias {{ django_home }}/static; }
           - location /media { alias {{ django_home }}/media; }
-
-  tasks:
-    - name: Execute On-Deploy Script
-      sudo: yes
-      command: "python {{ django_home }}/on_deploy.py"
+    - role: "{{ project_name }}_on_deploy"
       environment:
         DATABASE_URL: "{{ db_url }}"
-        SECRET_KEY: "{{ secret_key }}"
-        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-        PROJECT_EMAIL: "{{ project_email }}"
-        PROJECT_PASSWORD: "{{ project_password }}"
-        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
-
-    - name: Execute Test Run of On-Schedule Script
-      sudo: yes
-      command: "python {{ django_home }}/on_schedule.py DEBUG"
-      environment:
-        DATABASE_URL: "{{ db_url }}"
-        SECRET_KEY: "{{ secret_key }}"
-        DJANGO_SETTINGS_MODULE: "{{ settings_file }}"
-        PROJECT_EMAIL: "{{ project_email }}"
-        PROJECT_PASSWORD: "{{ project_password }}"
-        PROJECT_APP_PASSWORD: "{{ project_app_password }}"
-
-    - name: Creates hourly cronjob to send emails to subscribers
-      cron: minute="0"
-        name="Deliver Cute"
-        user="ubuntu"
-        job="python {{ django_home }}/on_schedule.py"
-    - name: Insert secret key into cron env
-      cronvar: user="ubuntu" name=SECRET_KEY value="{{ secret_key }}"
-    - name: Insert Django settings module into cron env
-      cronvar: user="ubuntu" name=DJANGO_SETTINGS_MODULE value="{{ settings_file }}"
-    - name: Insert app email address into cron env
-      cronvar: user="ubuntu" name=PROJECT_EMAIL value="{{ project_email }}"
-    - name: Insert email password into cron env
-      cronvar: user="ubuntu" name=PROJECT_PASSWORD value="{{ project_password }}"
-    - name: Insert app email password into cron env
-      cronvar: user="ubuntu" name=PROJECT_APP_PASSWORD value="{{ project_app_password }}"
-    - name: Insert Postgres database URL inro cron env
-      cronvar: user="ubuntu" name=DATABASE_URL value="{{ db_url }}"
 
 #pre_tasks
 #post_tasks

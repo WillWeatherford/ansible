@@ -52,16 +52,16 @@
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: makemigrations subscribers
-  environment:
-      DATABASE_URL: "{{ db_url }}"
+  # environment:
+  #     DATABASE_URL: "{{ db_url }}"
 
 - name: Migrate
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
     command: migrate
-  environment:
-      DATABASE_URL: "{{ db_url }}"
+  # environment:
+  #     DATABASE_URL: "{{ db_url }}"
 
 - name: Collect Static Files
   django_manage:
