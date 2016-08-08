@@ -2,14 +2,16 @@
 
 # Basic mysql provisioning example
 - name: "Deploy RDS Instance for {{ project_name }}."
-    rds:
-        command: create
-        instance_name: "{{ rds_instance_name }}"
-        db_name: "{{ rds_db_name }}"
-        db_engine: "{{ rds_db_engine }}"
-        size: "{{ rds_size }}"
-        instance_type: "{{ rds_instance_type }}"
-        username: "{{ rds_username}}"
-        password: "{{ rds_password }}"
-        port: "{{ rds_port }}"
-        region: " {{ aws_region }}"
+  local_action:
+    module: rds
+    command: create
+    instance_name: "{{ rds_instance_name }}"
+    db_name: "{{ rds_db_name }}"
+    db_engine: "{{ rds_db_engine }}"
+    size: "{{ rds_size }}"
+    instance_type: "{{ rds_instance_type }}"
+    username: "{{ rds_username}}"
+    password: "{{ rds_password }}"
+    port: "{{ rds_port }}"
+    region: " {{ aws_region }}"
+    security_groups: "{{ security_group }}"
