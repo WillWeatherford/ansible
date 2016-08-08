@@ -13,5 +13,5 @@
     username: "{{ rds_username}}"
     password: "{{ rds_password }}"
     port: "{{ rds_port }}"
-    region: " {{ aws_region }}"
-    security_groups: "{{ security_group }}"
+    region: "{{ aws_region }}"
+    vpc_security_groups: "{{ security_group }}"

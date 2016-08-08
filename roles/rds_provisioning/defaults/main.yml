@@ -1,9 +1,9 @@
 rds_username: "{{ project_name}}"
-rds_password: "{{ project_password }}"
+rds_password: "{{ db_password }}"
 rds_db_engine: postgres
-rds_instance_name: "{{ project_name }}-instance"
-rds_db_name: "{{ project_name }}-db"
+rds_instance_name: "{{ project_name }}instance"
+rds_db_name: "{{ project_name }}db"
 rds_size: 5
-rds_instance_type: "{{ db.t2.micro }}"
+rds_instance_type: db.t2.micro
 rds_port: "5432"
-aws_region: us-west-2
+aws_region: "us-west-2"
