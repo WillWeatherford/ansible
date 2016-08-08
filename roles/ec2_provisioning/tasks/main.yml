@@ -3,7 +3,7 @@
 - name: Look Up Existing EC2 Instances
   local_action:
     module: ec2_lookup
-    region: "{{ region }}"
+    region: "{{ aws_region }}"
     tags: "{{ instance_tags }}"
   register: ec2_pre_launch
 
@@ -22,7 +22,7 @@
     vpc_subnet_id: "{{ vpc_subnet_id }}"
     assign_public_ip: yes
     wait: true
-    region: "{{ region }}"
+    region: "{{ aws_region }}"
     instance_tags: "{{ instance_tags }}"
     volumes:
       - device_name: /dev/sda1
@@ -46,7 +46,7 @@
 
   local_action:
     module: ec2_lookup
-    region: "{{ region }}"
+    region: "{{ aws_region }}"
     tags: "{{ instance_tags }}"
   register: ec2_post_launch
 

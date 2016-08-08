@@ -1,6 +1,6 @@
 instance_type: t2.micro
 ami: ami-9abea4fb
-region: us-west-2
+aws_region: us-west-2
 instance_tags: {"Name": "{{ project_name }}"}
 root_ebs_size: 8
 zone: us-west-2b
