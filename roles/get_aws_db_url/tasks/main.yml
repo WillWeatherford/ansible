@@ -1,6 +1,6 @@
 - name: Get DB Hostvars
   set_fact:
-    db_host: "{{ hostvars[groups[rds_db_name][0]] }}"
+    db_host: "{{ hostvars[groups[rds_instance_name][0]] }}"
 
 - name: Set DB URL
   set_fact:
