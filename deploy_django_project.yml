@@ -32,6 +32,6 @@
             }
           - location /static { alias {{ django_home }}/static; }
           - location /media { alias {{ django_home }}/media; }
-    # - role: "{{ project_name }}_on_deploy"
-    #   environment:
-    #     DATABASE_URL: "{{ db_url }}"
+    - role: "{{ project_name }}_on_deploy"
+      environment:
+        DATABASE_URL: "{{ db_url }}"
