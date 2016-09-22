@@ -35,11 +35,15 @@
   sudo: yes
   file: path={{ media_path }} owner={{ app_user }} recurse=yes state=directory
 
-- name: Make App Migrations
-  django_manage:
-    app_path: "{{ django_home }}"
-    settings: "{{ settings_file }}"
-    command: makemigrations subscribers
+- name: Change Static Ownership
+  sudo: yes
+  file: path={{ static_path }} owner={{ app_user }} recurse=yes state=directory
+
+# - name: Make App Migrations
+#   django_manage:
+#     app_path: "{{ django_home }}"
+#     settings: "{{ settings_file }}"
+#     command: makemigrations subscribers
 
 - name: Migrate
   django_manage:
@@ -48,6 +52,7 @@
     command: migrate
 
 - name: Collect Static Files
+  sudo: yes
   django_manage:
     app_path: "{{ django_home }}"
     settings: "{{ settings_file }}"
