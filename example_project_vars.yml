@@ -1,0 +1,23 @@
+# Project specifics
+project_name: 'myproject'
+remote_repo: 'https://github.com/myprofile/my-project-repo.git'  # Github repo from which code will be cloned
+
+# AWS specifics
+keypair: pem-file-name  # name of your .pem file in ~/.ssh dir
+security_group: group-name  # name of security group on AWS containing EC2 and RDS instances
+vpc_subnet_id: subnet-hash  # subnet ID on AWS containing your instances
+
+# AWS RDS database details
+rds_instance_name: myproject-rds-instance  # RDS instance name
+rds_db_name: "{{ project_name }}"  # RDS database name (note this is different from RDS instance name)
+db_password: 'secret'  # RDS database password
+
+# Django specifics
+django_home: "/home/ubuntu/{{ project_name }}"  # Directory of django project on host
+settings_file: "{{ project_name }}.production_settings"  # Python path to settings file
+project_email: 'email@host.com'  # Used to set up an admin user on deploy, and/or to send emails from app
+project_password: 'secret'  # Used to set up an admin user on deploy
+secret_key: 'superdupersecret'  # Used in settings to authenticate initialization of app
+
+# Misc other
+project_app_password: 'hashedsecret'  # Gmail specific, needed to send emails from app
